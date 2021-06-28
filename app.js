@@ -1,15 +1,30 @@
+require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
+const paymentRoutes = require('./routes/paymentRoutes')
+const { checkUser } = require('./middleware/authmiddleware')
 
+const PORT = process.env.PORT
 const app = express()
+app.use(cors())
+app.use(express.json())
 
+app.use(
+    express.urlencoded({
+      extended: false,
+    })
+);
+app.set("view engine", "ejs");
 
 // Atlas Database Connection
-const dbURI = 'mongodb+srv://user:n8wiS7i922SCiz6@cluster.hc0cw.mongodb.net/paymentsdb';
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
-.then((result) => app.listen(5000))
-.catch((err) => console.log(err));
+const dbURI = process.env.MONGODB_URI;
+mongoose.connect(dbURI, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex:true })
 
+
+app.listen(PORT, console.log('Listening to order service at port '+PORT))
 
 // Routes
+//app.get('*', checkUser)
+app.use('/payment',paymentRoutes)
 app.get('/',(req,res) => res.send('Hello World from payments service'))
