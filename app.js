@@ -22,7 +22,7 @@ const dbURI = process.env.MONGODB_URI;
 mongoose.connect(dbURI, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex:true })
 
 
-app.listen(PORT, console.log('Listening to order service at port '+PORT))
+app.listen(PORT, console.log('Listening to payments service at port '+PORT))
 
 // Routes
 //app.get('*', checkUser)
